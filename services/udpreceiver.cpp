@@ -1,7 +1,7 @@
 #include "udpreceiver.h"
 #include <QByteArray>
 
-#include <channleitem.h>
+#include <models/channleitem.h>
 
 UdpReceiver::UdpReceiver(MeterAdapter *meterAdapter, ChannleAdapter *channleAdapter, QObject *parent) : QObject(parent),
     _meterAdapter(meterAdapter),
@@ -9,9 +9,6 @@ UdpReceiver::UdpReceiver(MeterAdapter *meterAdapter, ChannleAdapter *channleAdap
 {
     _socket = new QUdpSocket(this);
     qDebug()<<"success: "<<_socket->bind(QHostAddress::AnyIPv4, 7799);
-
-    //    this->setMeterAdpater(meterAdapter);
-    //    this->setChannleAdapter(channleAdapter);
 
     connect(_socket, &QUdpSocket::readyRead, [=]()
     {
@@ -23,12 +20,8 @@ UdpReceiver::UdpReceiver(MeterAdapter *meterAdapter, ChannleAdapter *channleAdap
         _socket->readDatagram(datagram.data(), datagram.size(),
                               &sender, &senderPort);
 
-        //        qDebug()<<QString::fromUtf8(datagram);
-
         this->datagramReader(QString::fromUtf8(datagram));
-
     });
-
 }
 
 void UdpReceiver::setMeterAdpater(MeterAdapter *meterAdpater)
@@ -60,7 +53,7 @@ void UdpReceiver::datagramReader(QString datagram)
     if(first == "/live/refresh")
     {
         Q_EMIT refreshTrackList();
-        _channleAdapter->clear();
+        _channleAdapter->clearAdapter();
         return;
     }
 
@@ -129,18 +122,20 @@ void UdpReceiver::makeChannles(QStringList data)
     if(midiInt == 1)
         midi = true;
 
-    int value= data.takeFirst().toInt();
-    int one = (value >> 16) & 0xFF;
-    int two = (value >> 8) & 0xFF;
-    int three = value & 0xFF;
-
+    QColor color;
+    if(!data.isEmpty())
+    {
+        int value= data.takeFirst().toInt();
+        int one = (value >> 16) & 0xFF;
+        int two = (value >> 8) & 0xFF;
+        int three = value & 0xFF;
+        color = QColor(one,two,three);
+    }
     ChannleItem *item = new ChannleItem(_channleAdapter);
     item->setName(name);
-    item->setColor(QColor(one,two,three));
+    item->setColor(color);
     item->setChannleNumber(channle);
     item->setMidi(midi);
-
-    qDebug()<<one<<" "<<two<<" "<<three;
 
     if(_channleAdapter->count() < channle+1)
     {
@@ -152,12 +147,14 @@ void UdpReceiver::makeChannles(QStringList data)
         _channleAdapter->insertRow(channle, item);
     }
 
+
     //add color to group list
-    QList<QColor> colors = _channleAdapter->colorGroups();
-    if(!colors.contains(QColor(one,two,three)))
+    QStringList colors = _channleAdapter->colorGroups();
+    if(!colors.contains(color.name()))
     {
-        colors.append(QColor(one,two,three));
+        colors.append(color.name());
         _channleAdapter->setColorGroups(colors);
+        qDebug()<<color.name();
     }
 
 }
@@ -214,7 +211,6 @@ void UdpReceiver::processSendLevel(QStringList data)
 
         while(data.length() > 0)
         {
-            qDebug()<<data;
             int send = data.takeFirst().toInt();
             float value = data.takeFirst().toFloat();
 

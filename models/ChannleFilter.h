@@ -17,7 +17,7 @@ public:
 
     Q_PROPERTY(bool midiOnly READ midiOnly WRITE setMidiOnly NOTIFY midiOnlyChanged)
     Q_PROPERTY(bool audioOnly READ audioOnly WRITE setAudioOnly NOTIFY audioOnlyChanged)
-    Q_PROPERTY(QColor filterColor READ filterColor WRITE setFilterColor NOTIFY filterColorChanged)
+    Q_PROPERTY(QString filterColor READ filterColor WRITE setFilterColor NOTIFY filterColorChanged)
 
     Q_PROPERTY(bool filterOn READ filterOn WRITE setFilterOn NOTIFY filterOnChanged)
 
@@ -29,8 +29,8 @@ public:
     bool isMidi() const;
     void setIsMidi(bool isMidi);
 
-    QColor filterColor() const;
-    void setFilterColor(const QColor &filterColor);
+    QString filterColor() const;
+    void setFilterColor(const QString &filterColor);
 
     bool filterOn() const;
     void setFilterOn(bool filterOn);
@@ -44,7 +44,7 @@ public:
 private:
     ChannleAdapter*     _unfilteredChannles;
     ChannleFilterProxy* _filterProxy;
-    QColor              _filterColor;
+    QString             _filterColor;
     bool                _filterOn;
     bool                _midiOnly;
     bool                _audioOnly;

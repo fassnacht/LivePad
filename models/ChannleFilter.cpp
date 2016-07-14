@@ -32,12 +32,12 @@ QObject *ChannleFilter::filteredList() const
     return _filterProxy;
 }
 
-QColor ChannleFilter::filterColor() const
+QString ChannleFilter::filterColor() const
 {
     return _filterColor;
 }
 
-void ChannleFilter::setFilterColor(const QColor &filterColor)
+void ChannleFilter::setFilterColor(const QString &filterColor)
 {
     _filterColor = filterColor;
     _filterProxy->setFilterColor(filterColor);

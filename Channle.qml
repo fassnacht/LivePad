@@ -55,29 +55,94 @@ Item
             color: main.color
         }
 
-        Meter
+        Item
         {
-            id: bars
-            width: 80
-            height: parent.height -20
+            width: parent.width-20
+
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: controls.top
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: 15
             anchors.top: colorRect.bottom
-            anchors.topMargin: 10
+            anchors.topMargin: 15
 
-            function updateLeft(channle, value)
+            Column
             {
-                if(channle == main.channleNumber)
-                    bars.leftChannle = value
+                spacing: bars.height*0.08
+                anchors.left: parent.left
+                anchors.top: parent.top
+
+                Rectangle
+                {
+                    width: bars.width
+                    height: 1
+                    color: "#888888"
+
+                    Text
+                    {
+                        anchors.left: parent.right
+                        anchors.leftMargin: 5
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "+6 db"
+                        color: "#888888"
+                    }
+                }
+
+                Repeater
+                {
+                    model: 13
+
+                    Rectangle
+                    {
+                        width: bars.width
+                        height: 1
+                        color: "#888888"
+
+                        Text
+                        {
+                            anchors.left: parent.right
+                            anchors.leftMargin: 5
+                            anchors.verticalCenter: parent.verticalCenter
+                            text:
+                            {
+                                if(index == 0)
+                                    return "0 db"
+                                else
+                                    return "-"+index*6+" db"
+                            }
+
+                            color: "#888888"
+                        }
+                    }
+
+                }
             }
 
-            function updateRight(channle, value)
+            Meter
             {
-                if(channle == main.channleNumber)
-                    bars.rightChannle = value
+                id: bars
+                width: parent.width/5
+                height: parent.height
+
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+
+                layer.enabled: true
+                opacity: 0.8
+
+                function updateLeft(channle, value)
+                {
+                    if(channle == main.channleNumber)
+                        bars.leftChannle = value
+                }
+
+                function updateRight(channle, value)
+                {
+                    if(channle == main.channleNumber)
+                        bars.rightChannle = value
+                }
             }
+
         }
 
         Column

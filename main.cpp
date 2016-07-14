@@ -2,14 +2,14 @@
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 
-#include "udpreceiver.h"
-#include "udpsender.h"
+#include "services/udpreceiver.h"
+#include "services/udpsender.h"
 #include <QQmlContext>
 
 
 //Adapter
-#include "meteradapter.h"
-#include "ChannleFilter.h"
+#include "models/meteradapter.h"
+#include "models/ChannleFilter.h"
 
 int main(int argc, char *argv[])
 {

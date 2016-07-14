@@ -7,5 +7,5 @@ UdpSender::UdpSender(QObject *parent) : QObject(parent)
 
 void UdpSender::send(QString data)
 {
-    qDebug()<<"Sending: "<<_sender->writeDatagram(data.toUtf8(),QHostAddress("192.168.0.207"), 7788);
+    qDebug()<<"Sending: "<<_sender->writeDatagram(data.toUtf8(),QHostAddress::LocalHost, 7788);
 }

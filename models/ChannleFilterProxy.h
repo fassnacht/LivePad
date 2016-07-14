@@ -11,8 +11,8 @@ class ChannleFilterProxy : public QSortFilterProxyModel
 public:
     explicit ChannleFilterProxy(QObject* parent = 0);
 
-    QColor filterColor() const;
-    void setFilterColor(const QColor &filterColor);
+    QString filterColor() const;
+    void setFilterColor(const QString &filterColor);
 
     bool filterOn() const;
     void setFilterOn(bool filterOn);
@@ -27,7 +27,7 @@ protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 private:
-    QColor              _filterColor;
+    QString             _filterColor;
     bool                _filterOn;
     bool                _midiOnly;
     bool                _audioOnly;

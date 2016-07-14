@@ -1,7 +1,9 @@
 #include "channleadapter.h"
 
-ChannleAdapter::ChannleAdapter(QObject *parent) : ListModelBase<ChannleItem>(parent)
+ChannleAdapter::ChannleAdapter(QObject *parent) : ListModelBase<ChannleItem>(parent),
+    _colorGroups("")
 {
+    _colorGroups.clear();
     _roles[Name] = "_name";
     _roles[Groups] = "_groups";
     _roles[SendLevel] = "_sendLevel";
@@ -64,13 +66,19 @@ int ChannleAdapter::count() const
     return ListModelBase::count();
 }
 
-QList<QColor> ChannleAdapter::colorGroups() const
+QStringList ChannleAdapter::colorGroups() const
 {
     return _colorGroups;
 }
 
-void ChannleAdapter::setColorGroups(const QList<QColor> &colorGroups)
+void ChannleAdapter::setColorGroups(const QStringList &colorGroups)
 {
     _colorGroups = colorGroups;
     Q_EMIT colorGroupsChanged();
+}
+
+void ChannleAdapter::clearAdapter()
+{
+    this->clear();
+    _colorGroups.clear();
 }

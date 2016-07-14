@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QUdpSocket>
 
-#include "meteradapter.h"
-#include "channleadapter.h"
+#include "models/meteradapter.h"
+#include "models/channleadapter.h"
 
 class UdpReceiver : public QObject
 {
@@ -16,6 +16,7 @@ public:
 
     void setMeterAdpater(MeterAdapter *meterAdpater);
     void setChannleAdapter(ChannleAdapter *channleAdapter);
+
 
 private:
     QUdpSocket      *_socket;

@@ -32,6 +32,7 @@ Rectangle
         {
             id: filter
             unfilteredChannles: channles
+            filterColor: groups.currentFilterColor
         }
 
         delegate: Channle
@@ -98,6 +99,8 @@ Rectangle
 
     Groups
     {
+        id: groups
+
         anchors.topMargin: 10
         anchors.rightMargin: 10
 

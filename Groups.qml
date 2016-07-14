@@ -8,18 +8,9 @@ Item
 
     signal currentState(var state)
 
+    property string currentFilterColor: "#000000"
+
     anchors.fill: parent
-
-    onColorModelChanged:
-    {
-        listModel.clear()
-        for(var i = 0; i<colorModel.count; i++)
-        {
-            listModel.append({color: colorModel.at(i)})
-            console.log(i)
-        }
-    }
-
 
     ButtonBase
     {
@@ -53,42 +44,45 @@ Item
 
     }
 
-    ListView
+    Flickable
     {
-        id: listView
+        id: flickable
 
-        width: parent.width
+        clip: true
+
         anchors.top: selectButton.bottom
         anchors.topMargin: 10
+        anchors.right: parent.right
         anchors.rightMargin: 10
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 10
         anchors.bottom: parent.bottom
 
-        model: listModel
+        contentWidth: content.width
+        contentHeight: content.height
 
-        ListModel
+        Column
         {
-            id: listModel
-        }
+            id: content
+            spacing: 10
 
-        spacing: 10
+            ColorGroupButton
+            {
+                normalColor: "#000000"
+                isOn: currentFilterColor == normalColor
+                onClicked: main.currentFilterColor = normalColor
+            }
 
-        //property string selectedGroup: model[0]
+            Repeater
+            {
+                model: channles.colorGroups
 
-        delegate: ButtonBase
-        {
-            width: parent.width
-            height: 70
-            text: "color"
-            normalColor: "#444444"
-            onColor: "black"
-            font.pixelSize: 20
-
-            textColor: isOn ? "#888888" : "black"
-
-            isOn: main.selectedGroup == modelData
-
-            onClicked: main.selectedGroup = modelData
+                ColorGroupButton
+                {
+                    isOn: currentFilterColor == normalColor
+                    onClicked: main.currentFilterColor = normalColor
+                }
+            }
         }
     }
 }

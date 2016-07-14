@@ -1,7 +1,7 @@
 #ifndef CHANNLEITEM_H
 #define CHANNLEITEM_H
 
-#include "BaseItem.h"
+#include "bases/BaseItem.h"
 #include "QVariantList"
 #include <QColor>
 

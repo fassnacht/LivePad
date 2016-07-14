@@ -1,14 +1,14 @@
 #ifndef CHANNLEADAPTER_H
 #define CHANNLEADAPTER_H
 
-#include "ListModelBase.h"
+#include "bases/ListModelBase.h"
 #include "channleitem.h"
 
 class ChannleAdapter : public ListModelBase<ChannleItem>
 {
     Q_OBJECT
 
-    Q_PROPERTY(QList<QColor> colorGroups READ colorGroups NOTIFY colorGroupsChanged)
+    Q_PROPERTY(QStringList colorGroups READ colorGroups NOTIFY colorGroupsChanged)
 
 public:
     explicit ChannleAdapter(QObject *parent = 0);
@@ -35,13 +35,15 @@ public:
 
     Q_INVOKABLE int count() const;
 
-    QList<QColor> colorGroups() const;
-    void setColorGroups(const QList<QColor> &colorGroups);
+    QStringList colorGroups() const;
+    void setColorGroups(const QStringList &colorGroups);
+
+    void clearAdapter();
 
 private:
     QHash<int, QByteArray>  _roles;
 
-    QList<QColor> _colorGroups;
+    QStringList _colorGroups;
 
 signals:
     void colorGroupsChanged();

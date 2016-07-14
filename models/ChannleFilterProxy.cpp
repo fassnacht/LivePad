@@ -4,7 +4,9 @@
 
 ChannleFilterProxy::ChannleFilterProxy(QObject *parent) : QSortFilterProxyModel(parent),
     _filterOn(false),
-    _filterColor(QColor(0,0,0))
+    _filterColor("#000000"),
+    _audioOnly(false),
+    _midiOnly(false)
 {
 
 }
@@ -12,13 +14,10 @@ ChannleFilterProxy::ChannleFilterProxy(QObject *parent) : QSortFilterProxyModel(
 bool ChannleFilterProxy::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row,0,source_parent);
-        qDebug()<<"filtering";
-
 
     bool color = true;
-
-    if(QColor(0,0,0) != _filterColor)
-        if(sourceModel()->data(index,ChannleAdapter::Roles::Color).value<QColor>() == _filterColor)
+    if(_filterColor != "#000000")
+        if(sourceModel()->data(index,ChannleAdapter::Roles::Color).toString() == _filterColor)
             color = true;
         else
             color = false;
@@ -72,12 +71,16 @@ void ChannleFilterProxy::setFilterOn(bool filterOn)
     _filterOn = filterOn;
 }
 
-QColor ChannleFilterProxy::filterColor() const
+QString ChannleFilterProxy::filterColor() const
 {
     return _filterColor;
 }
 
-void ChannleFilterProxy::setFilterColor(const QColor &filterColor)
+void ChannleFilterProxy::setFilterColor(const QString &filterColor)
 {
+    if(_filterColor == filterColor)
+        return;
+
     _filterColor = filterColor;
+    this->setSourceModel(this->sourceModel());
 }

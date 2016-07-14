@@ -4,15 +4,15 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    meteradapter.cpp \
-    udpreceiver.cpp \
-    BaseItem.cpp \
-    ListModelBase.cpp \
-    channleitem.cpp \
-    channleadapter.cpp \
-    udpsender.cpp \
-    ChannleFilter.cpp \
-    ChannleFilterProxy.cpp
+    models/meteradapter.cpp \
+    services/udpreceiver.cpp \
+    bases/BaseItem.cpp \
+    bases/ListModelBase.cpp \
+    models/channleitem.cpp \
+    models/channleadapter.cpp \
+    services/udpsender.cpp \
+    models/ChannleFilter.cpp \
+    models/ChannleFilterProxy.cpp
 
 RESOURCES += qml.qrc
 
@@ -23,16 +23,12 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    meteradapter.h \
-    udpreceiver.h \
-    BaseItem.h \
-    ListModelBase.h \
-    channleitem.h \
-    channleadapter.h \
-    udpsender.h \
-    ChannleFilter.h \
-    ChannleFilterProxy.h
-
-DISTFILES += \
-    Sends.qml
-
+    models/meteradapter.h \
+    services/udpreceiver.h \
+    bases/BaseItem.h \
+    bases/ListModelBase.h \
+    models/channleitem.h \
+    models/channleadapter.h \
+    services/udpsender.h \
+    models/ChannleFilter.h \
+    models/ChannleFilterProxy.h

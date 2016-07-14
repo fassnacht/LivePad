@@ -25,7 +25,7 @@ MouseArea
         anchors.fill: parent
 
         color: !isOn ? normalColor : onColor
-        Behavior on color {ColorAnimation{duration: 200}}
+        Behavior on color {ColorAnimation{duration: 50}}
 
 
         Rectangle
@@ -34,7 +34,7 @@ MouseArea
             anchors.fill: parent
             color: main.pressed ? "#AA222222" : "transparent"
 
-            Behavior on color {ColorAnimation{duration: 200}}
+            Behavior on color {ColorAnimation{duration: 50}}
         }
 
         Text
