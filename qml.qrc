@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Channle.qml</file>
+        <file>Meter.qml</file>
+        <file>ButtonBase.qml</file>
+        <file>SmallSends.qml</file>
+        <file>Groups.qml</file>
+    </qresource>
+</RCC>
