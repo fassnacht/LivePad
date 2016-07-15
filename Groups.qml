@@ -10,7 +10,9 @@ Item
 
     property string currentFilterColor: "#000000"
 
-    anchors.fill: parent
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 260
 
     ButtonBase
     {

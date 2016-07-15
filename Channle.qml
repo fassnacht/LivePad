@@ -106,9 +106,9 @@ Item
                             text:
                             {
                                 if(index == 0)
-                                    return "0 db"
+                                    return "+0"
                                 else
-                                    return "-"+index*6+" db"
+                                    return "-"+index*6
                             }
 
                             color: "#888888"

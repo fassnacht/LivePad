@@ -10,6 +10,7 @@
 //Adapter
 #include "models/meteradapter.h"
 #include "models/ChannleFilter.h"
+#include "models/settingsadapter.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,9 +32,15 @@ int main(int argc, char *argv[])
         sender->send("/live/name/track");
     });
 
+    SettingsAdapter *settingsAdapter = new SettingsAdapter(&app);
+
+    QObject::connect(settingsAdapter, &SettingsAdapter::sig_targetPortChanged, sender, &UdpSender::setTargetPort);
+    QObject::connect(settingsAdapter, &SettingsAdapter::sig_targetIpChanged, sender, &UdpSender::setTargetIp);
+
     view.rootContext()->setContextProperty("meters", meterAdapter);
     view.rootContext()->setContextProperty("channles", channleAdapter);
     view.rootContext()->setContextProperty("sender", sender);
+    view.rootContext()->setContextProperty("settings", settingsAdapter);
 
     view.setSource(QUrl(QStringLiteral("qrc:/main.qml")));
     view.setResizeMode(QQuickView::SizeViewToRootObject);

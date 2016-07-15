@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     models/channleadapter.cpp \
     services/udpsender.cpp \
     models/ChannleFilter.cpp \
-    models/ChannleFilterProxy.cpp
+    models/ChannleFilterProxy.cpp \
+    models/settingsadapter.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,4 +32,6 @@ HEADERS += \
     models/channleadapter.h \
     services/udpsender.h \
     models/ChannleFilter.h \
-    models/ChannleFilterProxy.h
+    models/ChannleFilterProxy.h \
+    models/settingsadapter.h
+

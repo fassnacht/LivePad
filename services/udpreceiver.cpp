@@ -21,6 +21,7 @@ UdpReceiver::UdpReceiver(MeterAdapter *meterAdapter, ChannleAdapter *channleAdap
                               &sender, &senderPort);
 
         this->datagramReader(QString::fromUtf8(datagram));
+        //qDebug()<<datagram;
     });
 }
 
@@ -153,9 +154,7 @@ void UdpReceiver::makeChannles(QStringList data)
     if(!colors.contains(color.name()))
     {
         colors.append(color.name());
-        _channleAdapter->setColorGroups(colors);
-        qDebug()<<color.name();
-    }
+        _channleAdapter->setColorGroups(colors);    }
 
 }
 

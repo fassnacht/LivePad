@@ -1,5 +1,6 @@
 import QtQuick 2.5
 import Helpers 1.0
+import QtQuick.Controls 1.4
 
 Rectangle
 {
@@ -32,7 +33,6 @@ Rectangle
         {
             id: filter
             unfilteredChannles: channles
-            filterColor: groups.currentFilterColor
         }
 
         delegate: Channle
@@ -97,202 +97,117 @@ Rectangle
             container.open()
     }
 
-    Groups
+
+    StackView
     {
-        id: groups
+        id: stack
+        anchors.fill: parent
+        initialItem: ""
 
-        anchors.topMargin: 10
-        anchors.rightMargin: 10
+        clip: true
 
-        colorModel: channles.colorGroups
-
-        onCurrentState:
+        Component
         {
-            if(state == 0)
-            {
-                filter.audioOnly = false
-                filter.midiOnly = false
-            }
+            id: groupComp
+        Groups
+        {
+            id: groups
+            height: main.height
+            width: 260
+            anchors.topMargin: 10
+            anchors.rightMargin: 10
 
-            if(state == 1)
-            {
-                filter.audioOnly = true
-                filter.midiOnly = false
-            }
+            colorModel: channles.colorGroups
 
-            if(state == 2)
+            onCurrentFilterColorChanged: filter.filterColor = currentFilterColor
+
+            onCurrentState:
             {
-                filter.audioOnly = false
-                filter.midiOnly = true
+                if(state == 0)
+                {
+                    filter.audioOnly = false
+                    filter.midiOnly = false
+                }
+
+                if(state == 1)
+                {
+                    filter.audioOnly = true
+                    filter.midiOnly = false
+                }
+
+                if(state == 2)
+                {
+                    filter.audioOnly = false
+                    filter.midiOnly = true
+                }
+            }
+        }
+        }
+
+        Component
+        {
+            id: sendsComp
+            Rectangle
+            {
+                height: main.height
+                width: 150
+                color: "green"
+            }
+        }
+
+        Component
+        {
+            id: masterComp
+            Rectangle
+            {
+                height: main.height
+                width: 80
+                color: "red"
             }
         }
     }
 }
 
 
-Rectangle
+SideBar
 {
     id: sideBar
-    anchors.right: parent.right
-    anchors.verticalCenter: parent.verticalCenter
-    width: 80
-    height: parent.height
-    color: "#222222"
-
-    Column
+    onSettingsClicked: settingsDialog.open()
+    onCurrentAktiveChanged:
     {
-        id: menu
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        if(currentAktive != -1)
+            container.open()
+        else
+            container.close()
+            //stack.clear()
 
-        property int currentAktive: -1
-
-        ButtonBase
+        if(currentAktive == 0)
         {
-            index: 0
-            width: sideBar.width
-            height: sideBar.width
-            text: "S"
-            normalColor: "#222222"
-            onColor: "#333333"
-            isOn: menu.currentAktive == index && container.opened
-            onClicked:
-            {
-                menu.currentAktive = index
-                container.toggelContainer()
-            }
+            stack.push(sendsComp)
         }
-
-        ButtonBase
+        else if(currentAktive == 1)
         {
-            index: 1
-            width: sideBar.width
-            height: sideBar.width
-            text: "G"
-            normalColor: "#222222"
-            onColor: "#333333"
-            isOn: menu.currentAktive == index && container.opened
-            onClicked:
-            {
-                menu.currentAktive = index
-                container.toggelContainer()
-            }
+            stack.push(groupComp)
         }
-
-        ButtonBase
+        else if(currentAktive == 2)
         {
-            index: 2
-            width: sideBar.width
-            height: sideBar.width
-            text: "M"
-            normalColor: "#222222"
-            onColor: "#333333"
-            isOn: menu.currentAktive == index && container.opened
-            onClicked:
-            {
-                menu.currentAktive = index
-                container.toggelContainer()
-            }
+            stack.push(masterComp)
         }
     }
+}
 
-    Column
+Settings
+{
+    id: settingsDialog
+    ipAddress: "192.168.0.207"
+
+    onIpAddressChanged:
     {
-        id: transport
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        ButtonBase
-        {
-            width: sideBar.width
-            height: sideBar.width
-
-            onColor: "#ff3223"
-            text: ""
-
-            normalColor: "#222222"
-
-            Item
-            {
-                width: 20
-                height: width
-                anchors.centerIn: parent
-                clip: true
-                Rectangle
-                {
-
-                    color: "black"
-                    width: 20
-                    height: width
-                    rotation: 45
-                    x: -6
-                }
-            }
-        }
-
-        ButtonBase
-        {
-            width: sideBar.width
-            height: sideBar.width
-
-            onColor: "#ff3223"
-            text: ""
-
-            normalColor: "#222222"
-
-            Rectangle
-            {
-                anchors.centerIn: parent
-                color: "black"
-                width: 20
-                height: width
-                radius: 10
-            }
-        }
-
-        Item
-        {
-            width: sideBar.width
-            height: 10
-        }
-
-        ButtonBase
-        {
-            width: sideBar.width
-            height: sideBar.width
-            text: "All"
-            onColor: "#ff3223"
-            isOn: true
-
-            onClicked:
-            {
-                for(var i = 0; i < channles.count(); i++)
-                {
-                    console.log("Arm")
-                    sender.send("/live/arm%ii%"+i+"%"+1);
-                }
-            }
-        }
-
-        ButtonBase
-        {
-            width: sideBar.width
-            height: sideBar.width
-            text: "S"
-            isOn: true
-            onColor: "#2883c9"
-
-            onClicked:
-            {
-
-                for(var i = 0; i < channles.count(); i++)
-                {
-                    console.log("Solo")
-                    sender.send("/live/solo%ii%"+i+"%"+0);
-                }
-            }
-        }
+        settings.targetIp = ipAddress
+        sender.send("/live/name/track")
     }
+
+    myIp: settings.ownIp
 }
 
 Component.onCompleted: sender.send("/live/name/track");
