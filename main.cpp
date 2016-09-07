@@ -11,6 +11,7 @@
 #include "models/meteradapter.h"
 #include "models/ChannleFilter.h"
 #include "models/settingsadapter.h"
+#include <QThread>
 
 int main(int argc, char *argv[])
 {
@@ -23,9 +24,15 @@ int main(int argc, char *argv[])
     MeterAdapter * meterAdapter = new MeterAdapter(&app);
     ChannleAdapter *channleAdapter = new ChannleAdapter(&app);
 
-    UdpReceiver *provider = new UdpReceiver(meterAdapter, channleAdapter, &app);
+    UdpReceiver *provider = new UdpReceiver(meterAdapter, channleAdapter);
+    QThread *providerThread = new QThread;
+    provider->moveToThread(providerThread);
+    providerThread->start();
 
-    UdpSender *sender = new UdpSender(&app);
+    UdpSender *sender = new UdpSender();
+    QThread *sendThread = new QThread;
+    sender->moveToThread(sendThread);
+    sendThread->start();
 
     QObject::connect(provider, &UdpReceiver::refreshTrackList, [=]()
     {

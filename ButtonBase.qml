@@ -32,7 +32,7 @@ MouseArea
         {
             id: highlighter
             anchors.fill: parent
-            color: main.pressed ? "#AA222222" : "transparent"
+            color: main.pressed ? "#AAFFFFFF" : "transparent"
 
             Behavior on color {ColorAnimation{duration: 50}}
         }

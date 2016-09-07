@@ -21,7 +21,6 @@ UdpReceiver::UdpReceiver(MeterAdapter *meterAdapter, ChannleAdapter *channleAdap
                               &sender, &senderPort);
 
         this->datagramReader(QString::fromUtf8(datagram));
-        //qDebug()<<datagram;
     });
 }
 
@@ -55,6 +54,7 @@ void UdpReceiver::datagramReader(QString datagram)
     {
         Q_EMIT refreshTrackList();
         _channleAdapter->clearAdapter();
+        _meterAdapter->clearChannleMeters();
         return;
     }
 
@@ -93,20 +93,20 @@ void UdpReceiver::processMeterInfo(QStringList data)
 {
     QString first = data.first();
 
-    if("/live/master/meter" == first)
+    if("/live/track/meter" == first)
     {
-        if(data.at(2) == "0")
-            _meterAdapter->setLeftMasterMeter(data.at(3).toFloat());
-        else
-            _meterAdapter->setRightMasterMeter(data.at(3).toFloat());
+        _meterAdapter->updateChannleMeter(data.at(2).toInt(), data.at(3).toInt(), data.at(4).toFloat());
     }
     else if("/live/return/meter" == first)
     {
         _meterAdapter->updateReturnMeter(data.at(2).toInt(), data.at(3).toInt(), data.at(4).toFloat());
     }
-    else if("/live/track/meter" == first)
+    else if("/live/master/meter" == first)
     {
-        _meterAdapter->updateChannleMeter(data.at(2).toInt(), data.at(3).toInt(), data.at(4).toFloat());
+        if(data.at(2) == "0")
+            _meterAdapter->setLeftMasterMeter(data.at(3).toFloat());
+        else
+            _meterAdapter->setRightMasterMeter(data.at(3).toFloat());
     }
 }
 
@@ -132,7 +132,7 @@ void UdpReceiver::makeChannles(QStringList data)
         int three = value & 0xFF;
         color = QColor(one,two,three);
     }
-    ChannleItem *item = new ChannleItem(_channleAdapter);
+    ChannleItem *item = new ChannleItem();
     item->setName(name);
     item->setColor(color);
     item->setChannleNumber(channle);
@@ -148,14 +148,21 @@ void UdpReceiver::makeChannles(QStringList data)
         _channleAdapter->insertRow(channle, item);
     }
 
+    if(_meterAdapter->channleMetersModel().length() <= channle)
+    {
+        MeterModel *meter = new MeterModel();
+        //_meterAdapter->channleMetersModel().append(meter);
+        _meterAdapter->appendMeter(meter);
+
+    }
 
     //add color to group list
     QStringList colors = _channleAdapter->colorGroups();
     if(!colors.contains(color.name()))
     {
         colors.append(color.name());
-        _channleAdapter->setColorGroups(colors);    }
-
+        _channleAdapter->setColorGroups(colors);
+    }
 }
 
 void UdpReceiver::processMute(QStringList data)

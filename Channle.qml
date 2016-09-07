@@ -130,6 +130,9 @@ Item
                 layer.enabled: true
                 opacity: 0.8
 
+                leftChannle: meters.channleMeters[main.channleNumber].left
+                rightChannle: meters.channleMeters[main.channleNumber].right
+
                 function updateLeft(channle, value)
                 {
                     if(channle == main.channleNumber)
@@ -141,8 +144,8 @@ Item
                     if(channle == main.channleNumber)
                         bars.rightChannle = value
                 }
-            }
 
+            }
         }
 
         Column
@@ -215,15 +218,15 @@ Item
 
 
     //### CONNECTIONS ###
-    Component.onCompleted:
-    {
-        meters.sig_leftChannleMeterUpdated.connect(bars.updateLeft)
-        meters.sig_rightChannleMeterUpdated.connect(bars.updateRight)
-    }
-    Component.onDestruction:
-    {
-        meters.sig_leftChannleMeterUpdated.disconnect(bars.updateLeft)
-        meters.sig_rightChannleMeterUpdated.disconnect(bars.updateRight)
-    }
+//    Component.onCompleted:
+//    {
+//        meters.sig_leftChannleMeterUpdated.connect(bars.updateLeft)
+//        meters.sig_rightChannleMeterUpdated.connect(bars.updateRight)
+//    }
+//    Component.onDestruction:
+//    {
+//        meters.sig_leftChannleMeterUpdated.disconnect(bars.updateLeft)
+//        meters.sig_rightChannleMeterUpdated.disconnect(bars.updateRight)
+//    }
 }
 

@@ -79,6 +79,10 @@ void ChannleAdapter::setColorGroups(const QStringList &colorGroups)
 
 void ChannleAdapter::clearAdapter()
 {
+    for(int i = 0; i <this->count(); i++)
+    {
+        delete this->takeRow(i);
+    }
     this->clear();
     _colorGroups.clear();
 }

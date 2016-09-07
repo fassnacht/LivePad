@@ -27,6 +27,8 @@ Rectangle
 
         clip: true
 
+        cacheBuffer: main.width
+
         model: filter.filteredList
 
         ChannleFilter
@@ -37,31 +39,31 @@ Rectangle
 
         delegate: Channle
         {
-        width: (main.width-80-5)/8
-        channleNumber: _channleNumber
-        channleName: _name
-        mute: _mute
-        solo: _solo
-        record: _record
-        selected: _selected
+            width: (main.width-80-5)/8
+            channleNumber: _channleNumber
+            channleName: _name
+            mute: _mute
+            solo: _solo
+            record: _record
+            selected: _selected
 
-        sendModel: _sendLevel
+            sendModel: _sendLevel
 
-        color: _color
+            color: _color
 
-        onMuteClicked: sender.send("/live/mute%ii%"+channle+"%"+(mute ? 0 : 1));
-        onSoloClicked: sender.send("/live/solo%ii%"+channle+"%"+(solo ? 1 : 0));
-        onRecordClicked: sender.send("/live/arm%ii%"+channle+"%"+(record ? 1 : 0));
+            onMuteClicked: sender.send("/live/mute%ii%"+channle+"%"+(mute ? 0 : 1));
+            onSoloClicked: sender.send("/live/solo%ii%"+channle+"%"+(solo ? 1 : 0));
+            onRecordClicked: sender.send("/live/arm%ii%"+channle+"%"+(record ? 1 : 0));
 
-        Component.onCompleted:
-        {
-            sender.send("/live/mute%i%"+(channleNumber));
-            sender.send("/live/solo%i%"+(channleNumber));
-            sender.send("/live/arm%i%"+(channleNumber));
-            sender.send("/live/send%i%"+(channleNumber));
+            Component.onCompleted:
+            {
+                sender.send("/live/mute%i%"+(channleNumber));
+                sender.send("/live/solo%i%"+(channleNumber));
+                sender.send("/live/arm%i%"+(channleNumber));
+                sender.send("/live/send%i%"+(channleNumber));
+            }
         }
     }
-}
 
 Rectangle
 {
@@ -199,7 +201,7 @@ SideBar
 Settings
 {
     id: settingsDialog
-    ipAddress: "192.168.0.207"
+    ipAddress: settings.ownIp
 
     onIpAddressChanged:
     {

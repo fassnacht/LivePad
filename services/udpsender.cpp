@@ -4,7 +4,7 @@ UdpSender::UdpSender(QObject *parent) : QObject(parent),
     _targetPort(7788),
     _targetIp("127.0.0.1")
 {
-    _sender = new QUdpSocket(this);
+    _sender = new QUdpSocket();
 }
 
 void UdpSender::send(QString data)

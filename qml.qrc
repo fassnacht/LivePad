@@ -9,5 +9,6 @@
         <file>ColorGroupButton.qml</file>
         <file>Settings.qml</file>
         <file>SideBar.qml</file>
+        <file>VerticalFader.qml</file>
     </qresource>
 </RCC>

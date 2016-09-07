@@ -2,6 +2,8 @@
 #define METERADAPTER_H
 
 #include <QObject>
+#include "metermodel.h"
+#include <QVector>
 
 class MeterAdapter : public QObject
 {
@@ -9,6 +11,9 @@ class MeterAdapter : public QObject
 
     Q_PROPERTY(float leftMasterMeter READ leftMasterMeter NOTIFY leftMasterMeterChanged)
     Q_PROPERTY(float rightMasterMeter READ rightMasterMeter NOTIFY rightMasterMeterChanged)
+
+    Q_PROPERTY(QList<QObject*> channleMeters READ channleMeters NOTIFY channleMetersChanged)
+
 public:
     explicit MeterAdapter(QObject *parent = 0);
 
@@ -21,9 +26,18 @@ public:
     void updateChannleMeter(int channle, int pan, float value);
     void updateReturnMeter(int returnChannle, int pan, float value);
 
+    QList<QObject *> channleMeters() const;
+    QVector<MeterModel *> channleMetersModel() const;
+
+    void appendMeter(MeterModel* meter);
+
+    void clearChannleMeters();
+
 private:
     float _leftMasterMeter;
     float _rightMasterMeter;
+
+    QVector<MeterModel*> _channleMeters;
 
 signals:
     void sig_leftChannleMeterUpdated(int channle, float value);
@@ -34,6 +48,8 @@ signals:
 
     void rightMasterMeterChanged();
     void leftMasterMeterChanged();
+
+    void channleMetersChanged();
 };
 
 #endif // METERADAPTER_H
