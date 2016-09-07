@@ -30,6 +30,8 @@ private:
     void processSolo(QStringList data);
     void processRecord(QStringList data);
     void processSendLevel(QStringList data);
+    void processPan(QStringList data);
+    void processVolume(QStringList data);
 
 signals:
     void refreshTrackList();

@@ -50,17 +50,15 @@ void UdpReceiver::datagramReader(QString datagram)
         return;
     }
 
-    if(first == "/live/refresh")
+    if(first == "/live/volume")
     {
-        Q_EMIT refreshTrackList();
-        _channleAdapter->clearAdapter();
-        _meterAdapter->clearChannleMeters();
+        processVolume(data);
         return;
     }
 
-    if(first == "/live/name/track")
+    if(first == "/live/pan")
     {
-        makeChannles(data);
+        processPan(data);
         return;
     }
 
@@ -85,6 +83,20 @@ void UdpReceiver::datagramReader(QString datagram)
     if(first == "/live/send")
     {
         processSendLevel(data);
+        return;
+    }
+
+    if(first == "/live/name/track")
+    {
+        makeChannles(data);
+        return;
+    }
+
+    if(first == "/live/refresh")
+    {
+        Q_EMIT refreshTrackList();
+        _channleAdapter->clearAdapter();
+        _meterAdapter->clearChannleMeters();
         return;
     }
 }
@@ -225,5 +237,27 @@ void UdpReceiver::processSendLevel(QStringList data)
         }
 
         _channleAdapter->at(channle)->setSendLevels(list);
+    }
+}
+
+void UdpReceiver::processPan(QStringList data)
+{
+    int channle = data.at(2).toInt();
+    float panning = data.at(3).toFloat();
+
+    if(channle < _channleAdapter->count())
+    {
+        _channleAdapter->at(channle)->setPan(panning);
+    }
+}
+
+void UdpReceiver::processVolume(QStringList data)
+{
+    int channle = data.at(2).toInt();
+    float volume = data.at(3).toFloat();
+
+    if(channle < _channleAdapter->count())
+    {
+        _channleAdapter->at(channle)->setLevel(volume);
     }
 }

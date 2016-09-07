@@ -15,6 +15,16 @@ Item
     property bool solo: false
     property bool selected: false
 
+    function setPanning(pan)
+    {
+        panControl.setPanning(pan)
+    }
+
+    function setVolume(volume)
+    {
+        fader.setValue(volume)
+    }
+
     property color color: "#FFFFFF"
 
     property var sendModel: [0.7, 0.2, 0.3, 0.5, 1.0, 0.2, 0.7, 0.2, 0.3, 0.5, 1.0, 0.2]
@@ -22,6 +32,8 @@ Item
     signal muteClicked(var channle, var mute)
     signal soloClicked(var channle, var solo)
     signal recordClicked(var channle, var record)
+    signal panChanged(var channle, var pan)
+    signal volumeChanged(var channle, var volume)
 
     Rectangle
     {
@@ -57,6 +69,7 @@ Item
 
         Item
         {
+            id: meterContainer
             width: parent.width-20
 
 
@@ -148,6 +161,18 @@ Item
             }
         }
 
+        VerticalFader
+        {
+            id: fader
+            height: meterContainer.height
+            width: 60
+            anchors.right: meterContainer.right
+            anchors.rightMargin: -10
+            anchors.verticalCenter: meterContainer.verticalCenter
+
+            onValueChanged: main.volumeChanged(main.channleNumber, value)
+        }
+
         Column
         {
             id: controls
@@ -171,10 +196,18 @@ Item
                 }
             }
 
+            PanControl
+            {
+                id: panControl
+                width: main.width-20
+                height: 40
+                onPanningChanged: main.panChanged(main.channleNumber, panning)
+            }
+
             ButtonBase
             {
                 width: main.width-20
-                height: main.width-20
+                //height: main.width-20
                 text: channleNumber+1
                 isOn: !main.mute
                 onColor: "#ffc907"

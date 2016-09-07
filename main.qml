@@ -9,6 +9,8 @@ Rectangle
     anchors.fill: parent
     color: "black"
 
+    property alias panLayer: topLayer
+
     ListView
     {
         id: listview
@@ -49,18 +51,29 @@ Rectangle
 
             sendModel: _sendLevel
 
+            property real panning: _pan
+            onPanningChanged: setPanning(panning)
+
+            property real level: _level
+            onLevelChanged: setVolume(level)
+
             color: _color
 
             onMuteClicked: sender.send("/live/mute%ii%"+channle+"%"+(mute ? 0 : 1));
             onSoloClicked: sender.send("/live/solo%ii%"+channle+"%"+(solo ? 1 : 0));
             onRecordClicked: sender.send("/live/arm%ii%"+channle+"%"+(record ? 1 : 0));
+            onPanChanged: sender.send("/live/pan%if%"+channle+"%"+pan);
+            onVolumeChanged: sender.send("/live/volume%if%"+channle+"%"+volume);
 
             Component.onCompleted:
             {
+                setVolume(_level)
                 sender.send("/live/mute%i%"+(channleNumber));
                 sender.send("/live/solo%i%"+(channleNumber));
                 sender.send("/live/arm%i%"+(channleNumber));
                 sender.send("/live/send%i%"+(channleNumber));
+                sender.send("/live/pan%i%"+(channleNumber));
+                sender.send("/live/volume%i%"+(channleNumber));
             }
         }
     }
@@ -198,6 +211,36 @@ SideBar
     }
 }
 
+Item
+{
+    id: topLayer
+    anchors.fill: parent
+
+    function getGlobalPosition(item)
+    {
+        var globalPos = item.mapToItem(topLayer, 0,0)
+        return globalPos
+    }
+
+    function bringToFront(item, absX ,absY)
+    {
+        var globalPos = getGlobalPosition(item)
+        item.parent = topLayer
+
+        if(absX != undefined)
+            item.x = absX
+        else
+            item.x = globalPos.x
+
+        if(absY != undefined)
+            item.y = absY
+        else
+            item.y = globalPos.y
+    }
+
+}
+
+
 Settings
 {
     id: settingsDialog
@@ -211,6 +254,9 @@ Settings
 
     myIp: settings.ownIp
 }
+
+
+
 
 Component.onCompleted: sender.send("/live/name/track");
 }
