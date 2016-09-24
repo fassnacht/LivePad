@@ -15,6 +15,8 @@ Item
     property bool solo: false
     property bool selected: false
 
+    property bool isMidi: false
+
     function setPanning(pan)
     {
         panControl.setPanning(pan)
@@ -171,6 +173,8 @@ Item
             anchors.verticalCenter: meterContainer.verticalCenter
 
             onValueChanged: main.volumeChanged(main.channleNumber, value)
+
+            visible: !main.isMidi
         }
 
         Column

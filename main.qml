@@ -49,6 +49,7 @@ Rectangle
             record: _record
             selected: _selected
 
+            isMidi: _midi
             sendModel: _sendLevel
 
             property real panning: _pan

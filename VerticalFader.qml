@@ -17,8 +17,6 @@ Item
             value = 0
 
         handle.y = (main.height-handle.height)*(1-value)
-        console.log(value)
-
     }
 
     Rectangle

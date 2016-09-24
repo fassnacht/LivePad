@@ -83,7 +83,7 @@ Rectangle
         id: bigView
         //anchors.centerIn: parent
 
-        width: pan.width*3
+        width: pan.width*1.3
         height: pan.height*2
 
         color: "#774444FF"
